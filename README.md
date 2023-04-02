@@ -2,14 +2,16 @@
 
 React + TailwindCSS bundled with Vite.
 
-# Installation
-```
+## Installation
+
+```bash
 npm i
 ```
 
-# Building the Extension:
+## Building the Extension
 
-## Firefox
+### Firefox
+
 `npm run build` builds the extension by default for Firefox.
 
 The generated files are in `dist/`.
@@ -20,16 +22,17 @@ Firefox > Preferences > Extensions & Themes > Debug Add-ons > Load Temporary Add
 
 Here locate the `dist/` directory and open `manifest.json`
 
-## Chrome
+### Chrome
+
 `npm run build:chrome` builds the extensions for Google Chrome.
 
 The generated files are in `dist/`.
 To load the extensions in Google Chrome go to `chrome://extensions/` and click `Load unpacked`. Locate the dist directory and select `manifest.json`.
 
-# Files:
+## Files
 
- - content-script - UI files
- - background.ts - Background script/Service worker
- - index.html - popup UI
+-   content-script - UI files
+-   background.ts - Background script/Service worker
+-   index.html - popup UI
 
 If you have any questions feel free to open an issue.
