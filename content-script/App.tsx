@@ -1,6 +1,7 @@
 import browser from "webextension-polyfill";
 import React, { useEffect, useState } from "react";
 import SignIn from "./SignIn";
+import Button from "../components/Button";
 
 enum SCREEN {
     SIGN_IN,
@@ -112,6 +113,7 @@ const App = () => {
         <div className="absolute top-20 left-20">
             <div className="flex flex-col gap-4 p-4 shadow-sm bg-gradient-to-r from-purple-100 to-blue-200 w-96 rounded-md">
                 <h1>Cat Facts!</h1>
+                <Button>Hello!</Button>
                 {renderApp()}
             </div>
         </div>
