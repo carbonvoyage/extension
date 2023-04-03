@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 import React, { useEffect, useState } from "react";
-import SignIn from "./SignIn";
+import SignIn from "../components/SignIn";
 import Button from "../components/Button";
 
 enum SCREEN {
