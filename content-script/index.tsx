@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import InitScraper from "./scraper";
 import App from "./App";
-import "./index.css";
+import "../styles/global.css";
 
 const pluginTagId = "__carbonvoyage";
 const existingInstance = document.getElementById("__carbonvoyage");

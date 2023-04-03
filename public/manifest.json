@@ -4,30 +4,35 @@
     "version": "0.0.1",
     "manifest_version": 2,
     "browser_action": {
-        "default_popup": "index.html",
+        "default_popup": "popup/index.html",
         "default_title": "Carbon Voyage"
     },
-    "optional_permissions": ["<all_urls>"],
+    "permissions": ["storage"],
     "content_scripts": [
         {
             "matches": [
                 "https://www.amazon.com/*",
-                "https://amazon.com/*",
                 "https://www.walmart.com/*",
-                "https://walmart.com/*",
-                "https://www.ebay.com/",
-                "https://ebay.com/"
+                "https://www.ebay.com/"
             ],
             "run_at": "document_end",
             "js": ["./index.global.js"],
             "css": ["./style.css"]
         }
     ],
+    "options_ui": {
+        "page": "options/index.html"
+    },
     "background": {
         "page": "background.html",
         "persistent": false
     },
     "icons": {
         "128": "logo128.png"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "extension@carbonvoyage.org"
+        }
     }
 }

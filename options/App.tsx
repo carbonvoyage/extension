@@ -20,7 +20,7 @@ const App = () => {
 
     return (
         <div>
-            <h1>Popup</h1>
+            <h1>Settings</h1>
             <Button>Click me</Button>
         </div>
     );

@@ -23,6 +23,6 @@
             "@styles/*": ["styles/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "background/supabase.ts"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
