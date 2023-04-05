@@ -16,12 +16,11 @@ const App = () => {
         getSession();
     }, []);
 
-    if (!session) return <div>Not logged in</div>;
-
     return (
-        <div>
+        <div className="w-80 h-80">
             <h1>Popup</h1>
             <Button>Click me</Button>
+            {!session && <div>Not logged in</div>}
         </div>
     );
 };

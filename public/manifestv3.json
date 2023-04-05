@@ -24,7 +24,7 @@
         "page": "options/index.html"
     },
     "background": {
-        "service_worker": "./background.global.js"
+        "service_worker": "background.global.js"
     },
     "icons": {
         "128": "logo128.png"

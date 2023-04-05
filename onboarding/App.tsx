@@ -1,6 +1,13 @@
 import browser from "webextension-polyfill";
 import React, { useEffect, useState } from "react";
+import AuthModal from "../components/AuthModal";
 import Button from "../components/Button";
+
+enum SCREEN {
+    SIGN_IN,
+    SIGN_UP,
+    FACTS,
+}
 
 const App = () => {
     const [session, setSession] = useState(null);
@@ -16,14 +23,23 @@ const App = () => {
         getSession();
     }, []);
 
-    if (!session) return <div>Not logged in</div>;
+    useEffect(() => {
+        console.log("session", session);
+    }, [session]);
 
-    return (
-        <div>
-            <h1>Settings</h1>
-            <Button>Click me</Button>
-        </div>
-    );
+    async function handleSignIn(email: string, password: string) {
+        const { data } = await browser.runtime.sendMessage({
+            action: "signin",
+            value: { email, password },
+        });
+
+        setSession(data.session);
+    }
+
+    if (!session) {
+        return <AuthModal />;
+    }
+
+    return <></>;
 };
-
 export default App;

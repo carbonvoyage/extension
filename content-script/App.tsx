@@ -1,6 +1,5 @@
 import browser from "webextension-polyfill";
 import React, { useEffect, useState } from "react";
-import SignIn from "../components/SignIn";
 import Button from "../components/Button";
 
 enum SCREEN {
@@ -62,32 +61,6 @@ const App = () => {
 
     function renderApp() {
         if (!session) {
-            if (screen === SCREEN.SIGN_UP) {
-                return (
-                    <SignIn
-                        onSignIn={handleSignUp}
-                        title={"Sign Up"}
-                        onScreenChange={() => {
-                            setScreen(SCREEN.SIGN_IN);
-                            setError("");
-                        }}
-                        helpText={"Got an account? Sign in"}
-                        error={error}
-                    />
-                );
-            }
-            return (
-                <SignIn
-                    title="Sign In"
-                    onSignIn={handleSignIn}
-                    onScreenChange={() => {
-                        setScreen(SCREEN.SIGN_UP);
-                        setError("");
-                    }}
-                    helpText={"Create an account"}
-                    error={error}
-                />
-            );
         }
 
         return (

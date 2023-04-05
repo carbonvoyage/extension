@@ -24,7 +24,7 @@
         "page": "options/index.html"
     },
     "background": {
-        "page": "background.html",
+        "page": "background/index.html",
         "persistent": false
     },
     "icons": {
