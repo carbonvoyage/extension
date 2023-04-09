@@ -20,7 +20,7 @@ const App = () => {
         <div className="w-80 h-80">
             <h1>Popup</h1>
             <Button>Click me</Button>
-            {!session && <div>Not logged in</div>}
+            {!session ? <div>Not logged in</div> : <div>Logged in!</div>}
         </div>
     );
 };

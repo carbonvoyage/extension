@@ -36,18 +36,6 @@ async function handleMessage(
 
             response({ message: "Successfully signed up!", fetchData });
             break;
-        case "signup":
-            result = await supabase.auth.signUp(value);
-
-            response({ message: "Successfully signed up!", data: result });
-            break;
-        case "signin":
-            console.log("requesting auth");
-            const { data: signInData, error: signInError } =
-                await supabase.auth.signInWithPassword(value);
-
-            response({ signInData, signInError });
-            break;
         case "getSession":
             supabase.auth.getSession().then(response);
             break;
@@ -67,9 +55,45 @@ browser.runtime.onMessage.addListener((msg, _sender, response) => {
     return true;
 });
 
+// Listen for messages from the website
+browser.runtime.onMessageExternal.addListener(async (msg, sender) => {
+    // Check if we're in development mode
+    // https://stackoverflow.com/a/46269256/9264137
+    const URL =
+        "update_url" in browser.runtime.getManifest()
+            ? "https://carbonvoyage.org"
+            : "http://localhost:3000";
+
+    // Only allow messages from the website
+    // @ts-ignore
+    if (sender.origin !== URL) {
+        return;
+    }
+
+    switch (msg.action) {
+        case "updateSession":
+            const { error } = await supabase.auth.setSession(msg.session);
+            if (error) {
+                console.error(error);
+            }
+            break;
+        case "removeSession":
+            const { error: signOutError } = await supabase.auth.signOut();
+            if (signOutError) {
+                console.error(signOutError);
+            }
+            break;
+    }
+});
+
 // On install, open the onboarding page
 browser.runtime.onInstalled.addListener(() => {
+    const URL =
+        "update_url" in browser.runtime.getManifest()
+            ? "https://carbonvoyage.org/signin"
+            : "http://localhost:3000/signin";
+
     browser.tabs.create({
-        url: browser.runtime.getURL("onboarding/index.html"),
+        url: URL,
     });
 });

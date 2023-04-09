@@ -26,8 +26,6 @@ export default defineConfig({
                     .pathname,
                 settings: new URL("./options/index.html", import.meta.url)
                     .pathname,
-                onboarding: new URL("./onboarding/index.html", import.meta.url)
-                    .pathname,
             },
         },
     },
