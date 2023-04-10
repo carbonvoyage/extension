@@ -1,5 +1,11 @@
-export { default as Apple } from "./Apple";
+export { default as Activity } from "./Activity";
+export { default as Bag } from "./Bag";
 export { default as Close } from "./Close";
-export { default as Google } from "./Google";
-export { default as GitHub } from "./GitHub";
-export { default as Notion } from "./Notion";
+export { default as Heart } from "./Heart";
+export { default as History } from "./History";
+export { default as Known } from "./Known";
+export { default as Logo } from "./Logo";
+export { default as Menu } from "./Menu";
+export { default as Settings } from "./Settings";
+export { default as Unknown } from "./Unknown";
+export { default as User } from "./User";

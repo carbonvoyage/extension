@@ -15,6 +15,7 @@
         {
             "matches": [
                 "*://*.amazon.com/*",
+                "*://*.carbonvoyage.org/*",
                 "*://*.walmart.com/*",
                 "*://*.ebay.com/"
             ],

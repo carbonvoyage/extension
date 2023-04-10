@@ -1,8 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import browser from "webextension-polyfill";
 import InitScraper from "./scraper";
 import App from "./App";
 import "../styles/global.css";
+
+// Let the popup know that the content script is ready
+// @ts-ignore
+browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+    if (request.action === "getURL")
+        sendResponse({ url: window.location.href });
+});
 
 const pluginTagId = "__carbonvoyage";
 const existingInstance = document.getElementById("__carbonvoyage");

@@ -33,24 +33,6 @@ const App = () => {
         setLoading(false);
     }
 
-    async function handleSignUp(email: string, password: string) {
-        await browser.runtime.sendMessage({
-            action: "signup",
-            value: { email, password },
-        });
-        setScreen(SCREEN.SIGN_IN);
-    }
-
-    async function handleSignIn(email: string, password: string) {
-        const { data, error } = await browser.runtime.sendMessage({
-            action: "signin",
-            value: { email, password },
-        });
-        if (error) return setError(error.message);
-
-        setSession(data.session);
-    }
-
     async function handleSignOut() {
         const signOutResult = await browser.runtime.sendMessage({
             action: "signout",

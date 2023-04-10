@@ -1,6 +1,8 @@
 import browser from "webextension-polyfill";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
+import Navbar from "../components/Navbar";
+import Topbar from "../components/Topbar";
 
 const App = () => {
     const [session, setSession] = useState(null);
@@ -17,10 +19,12 @@ const App = () => {
     }, []);
 
     return (
-        <div className="w-80 h-80">
+        <div className="w-80 h-120">
+            <Topbar />
             <h1>Popup</h1>
             <Button>Click me</Button>
             {!session ? <div>Not logged in</div> : <div>Logged in!</div>}
+            <Navbar />
         </div>
     );
 };

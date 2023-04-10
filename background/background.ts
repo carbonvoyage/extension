@@ -9,6 +9,11 @@ type AuthFormMessage = {
     };
 };
 
+type UpdateIconMessage = {
+    action: "updateIcon";
+    value: string;
+};
+
 type AuthMessage = {
     action: "getSession" | "signout";
     value: null;
@@ -19,7 +24,7 @@ type FetchMessage = {
     value: null;
 };
 
-type Message = AuthFormMessage | AuthMessage | FetchMessage;
+type Message = AuthFormMessage | UpdateIconMessage | AuthMessage | FetchMessage;
 
 type ResponseCallback = (data: any) => void;
 
@@ -36,6 +41,12 @@ async function handleMessage(
 
             response({ message: "Successfully signed up!", fetchData });
             break;
+        case "updateIcon":
+            if (value) {
+                browser.action.setIcon({ path: value });
+            } else {
+                browser.action.setIcon({ path: "./logo128.png" });
+            }
         case "getSession":
             supabase.auth.getSession().then(response);
             break;

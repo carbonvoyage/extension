@@ -24,6 +24,15 @@ if (body) {
     body.append(index);
 }
 
+// Load the Typekit font
+const head = document.querySelector("head");
+if (head) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://use.typekit.net/zkr2bhm.css";
+    head.append(link);
+}
+
 ReactDOM.createRoot(index).render(
     <React.StrictMode>
         <App />
