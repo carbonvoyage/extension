@@ -7,7 +7,7 @@
         "default_popup": "popup/index.html",
         "default_title": "Carbon Voyage"
     },
-    "permissions": ["storage"],
+    "permissions": ["storage", "tabs"],
     "externally_connectable": {
         "matches": ["*://*.carbonvoyage.org/*", "http://localhost:3000/*"]
     },

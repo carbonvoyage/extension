@@ -66,6 +66,52 @@ browser.runtime.onMessage.addListener((msg, _sender, response) => {
     return true;
 });
 
+const validPages = [
+    "carbonvoyage.org",
+    "amazon.com",
+    "walmart.com",
+    "ebay.com",
+];
+
+// Listen for active tab changes to see if the icon should be disabled.
+// We can't reach out to see if the content script is running since
+// the content script is only injected on valid pages
+browser.tabs.onActivated.addListener(async ({ tabId }) => {
+    const tab = await browser.tabs.get(tabId);
+    if (!tab.url) {
+        browser.action.setIcon({ path: "./logoDisabled128.png" });
+        return;
+    }
+
+    const url = new URL(tab.url);
+    const domain = url.hostname.replace("www.", "");
+
+    // Check if the active tab is a valid page
+    if (!validPages.includes(domain)) {
+        browser.action.setIcon({ path: "./logoDisabled128.png" });
+    }
+});
+
+// Wait for the tab to load
+// https://stackoverflow.com/a/20077404/9264137
+
+// const tabId = tab.id;
+
+// if (tabId !== activeInfo.tabId || !tab.url) {
+//     return;
+// }
+
+// const url = new URL(tab.url);
+// const domain = url.hostname.replace("www.", "");
+// console.log(domain);
+
+// // Check if the active tab is a valid page
+// if (!validPages.includes(domain)) {
+//     browser.action.setIcon({ path: "./logoDisabled128.png" });
+// } else {
+//     browser.action.setIcon({ path: "./logo128.png" });
+// }
+
 // Listen for messages from the website
 browser.runtime.onMessageExternal.addListener(async (msg, sender) => {
     // Check if we're in development mode

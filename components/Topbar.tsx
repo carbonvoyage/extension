@@ -38,18 +38,9 @@ const Topbar = () => {
                         } else {
                             setKnown(SiteType.KNOWN);
                         }
-
-                        browser.runtime.sendMessage({
-                            action: "updateIcon",
-                            value: "./logo128.png",
-                        });
                     } catch (e) {
                         setUrl("Unsupported Site");
                         setKnown(SiteType.UNKNOWN);
-                        browser.runtime.sendMessage({
-                            action: "updateIcon",
-                            value: "./logoDisabled128.png",
-                        });
                     }
                 });
         };
@@ -77,7 +68,7 @@ const Topbar = () => {
                             case SiteType.UNKNOWN:
                                 return (
                                     <Unknown
-                                        className="inline-block mr-1 mb-px"
+                                        className="inline-block mr-1 -translate-y-px"
                                         width="14px"
                                         height="14px"
                                     />
@@ -85,7 +76,7 @@ const Topbar = () => {
                             case SiteType.KNOWN:
                                 return (
                                     <Known
-                                        className="inline-block mr-1 mb-px"
+                                        className="inline-block mr-1 -translate-y-px"
                                         width="14px"
                                         height="14px"
                                     />
@@ -93,7 +84,7 @@ const Topbar = () => {
                             case SiteType.ORIGIN:
                                 return (
                                     <Heart
-                                        className="inline-block mr-1 mb-px"
+                                        className="inline-block mr-1 -translate-y-px"
                                         width="14px"
                                         height="14px"
                                     />
