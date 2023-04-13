@@ -21,10 +21,10 @@ const Button: FunctionComponent<Props> = ({
     let buttonSize = "py-2 px-4";
     switch (size) {
         case "none":
-            buttonSize = "p-0";
+            buttonSize = "rounded-xl p-0";
             break;
         case "minimal":
-            buttonSize = "rounded-md p-1";
+            buttonSize = "rounded-xl p-1";
         case "small":
             buttonSize = "rounded-xl py-1 px-3";
             break;
@@ -57,7 +57,7 @@ const Button: FunctionComponent<Props> = ({
             onClick={onClick}
             type="button"
             // TODO Fix undefined className
-            className={`${className} ${buttonVariant} ${buttonSize}`}
+            className={`button-duration-200 ${className} ${buttonVariant} ${buttonSize}`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}

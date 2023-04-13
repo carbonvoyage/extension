@@ -36,6 +36,14 @@
     height: calc(100vh - 80px);
 }
 
+#__carbonvoyage .button-duration-200 {
+    transition: background-color 200ms ease-in-out,
+        border-color 200ms ease-in-out, color 200ms ease-in-out,
+        fill 200ms ease-in-out, stroke 200ms ease-in-out,
+        opacity 200ms ease-in-out, padding 200ms ease-in-out,
+        border-radius 200ms ease-in-out;
+}
+
 #__carbonvoyage .no-select {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */

@@ -1,6 +1,6 @@
 import React from "react";
 
-const External = ({ className = "", ...props }) => (
+const Home = ({ className = "", ...props }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -14,10 +14,9 @@ const External = ({ className = "", ...props }) => (
         className={className}
         {...props}
     >
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-        <polyline points="15 3 21 3 21 9"></polyline>
-        <line x1="10" y1="14" x2="21" y2="3"></line>
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
     </svg>
 );
 
-export default External;
+export default Home;

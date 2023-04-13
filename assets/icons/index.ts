@@ -1,8 +1,11 @@
 export { default as Activity } from "./Activity";
 export { default as Bag } from "./Bag";
+export { default as Check } from "./Check";
 export { default as Close } from "./Close";
+export { default as External } from "./External";
 export { default as Heart } from "./Heart";
 export { default as History } from "./History";
+export { default as Home } from "./Home";
 export { default as Known } from "./Known";
 export { default as Logo } from "./Logo";
 export { default as Menu } from "./Menu";

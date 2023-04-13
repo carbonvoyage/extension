@@ -1,30 +1,22 @@
 import browser from "webextension-polyfill";
 import supabase from "./supabase";
 
-type AuthFormMessage = {
-    action: "signup" | "signin";
-    value: {
-        email: string;
-        password: string;
-    };
-};
-
-type UpdateIconMessage = {
+type UpdateMessage = {
     action: "updateIcon";
     value: string;
 };
 
-type AuthMessage = {
-    action: "getSession" | "signout";
+type GetMessage = {
+    action: "getSession" | "getUser" | "getCharities";
     value: null;
 };
 
-type FetchMessage = {
-    action: "fetch";
-    value: null;
+type GetMessageBy = {
+    action: "getCharity";
+    value: string;
 };
 
-type Message = AuthFormMessage | UpdateIconMessage | AuthMessage | FetchMessage;
+type Message = UpdateMessage | GetMessage | GetMessageBy;
 
 type ResponseCallback = (data: any) => void;
 
@@ -32,14 +24,30 @@ async function handleMessage(
     { action, value }: Message,
     response: ResponseCallback
 ) {
-    let result;
-
     switch (action) {
-        case "fetch":
-            result = await fetch("https://meowfacts.herokuapp.com/");
-            const { data: fetchData } = await result.json();
-
-            response({ message: "Successfully signed up!", fetchData });
+        case "getSession":
+            supabase.auth.getSession().then(response);
+            break;
+        case "getUser":
+            const { data } = await supabase.from("users").select("*").single();
+            response({ user: data });
+            break;
+        case "getCharities":
+            // TODO: Move API key to env
+            const everyResponse = await fetch(
+                "https://partners.every.org/v0.2/search/carbon?causes=environment&take=10&apiKey=pk_live_4bd96cb06d0f55b6f2f9b62fb81bee4a"
+            );
+            const { nonprofits } = await everyResponse.json();
+            response({ charities: nonprofits });
+            break;
+        case "getCharity":
+            const charityResponse = await fetch(
+                `https://partners.every.org/v0.2/nonprofit/${value}?apiKey=pk_live_4bd96cb06d0f55b6f2f9b62fb81bee4a`
+            );
+            const {
+                data: { nonprofit: charity },
+            } = await charityResponse.json();
+            response({ charity: charity });
             break;
         case "updateIcon":
             if (value) {
@@ -47,13 +55,6 @@ async function handleMessage(
             } else {
                 browser.action.setIcon({ path: "./logo128.png" });
             }
-        case "getSession":
-            supabase.auth.getSession().then(response);
-            break;
-        case "signout":
-            const { error: signOutError } = await supabase.auth.signOut();
-
-            response({ data: null, signOutError });
             break;
         default:
             response({ data: null, error: "Unknown action" });
@@ -91,26 +92,6 @@ browser.tabs.onActivated.addListener(async ({ tabId }) => {
         browser.action.setIcon({ path: "./logoDisabled128.png" });
     }
 });
-
-// Wait for the tab to load
-// https://stackoverflow.com/a/20077404/9264137
-
-// const tabId = tab.id;
-
-// if (tabId !== activeInfo.tabId || !tab.url) {
-//     return;
-// }
-
-// const url = new URL(tab.url);
-// const domain = url.hostname.replace("www.", "");
-// console.log(domain);
-
-// // Check if the active tab is a valid page
-// if (!validPages.includes(domain)) {
-//     browser.action.setIcon({ path: "./logoDisabled128.png" });
-// } else {
-//     browser.action.setIcon({ path: "./logo128.png" });
-// }
 
 // Listen for messages from the website
 browser.runtime.onMessageExternal.addListener(async (msg, sender) => {

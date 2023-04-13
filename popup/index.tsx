@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { SkeletonTheme } from "react-loading-skeleton";
+
+import { DEFAULT_SKELETON_THEME } from "./constants";
 import App from "./App";
 import "../styles/global.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const pluginTagId = "__carbonvoyage";
 const existingInstance = document.getElementById("__carbonvoyage");
@@ -35,6 +39,8 @@ if (head) {
 
 ReactDOM.createRoot(index).render(
     <React.StrictMode>
-        <App />
+        <SkeletonTheme {...DEFAULT_SKELETON_THEME}>
+            <App />
+        </SkeletonTheme>
     </React.StrictMode>
 );

@@ -48,7 +48,7 @@ const Topbar = () => {
     }, []);
 
     return (
-        <div className="fixed top-0 h-12 w-full backdrop-blur-lg bg-carbon-gold bg-opacity-50 border-b border-carbon-bronze/20">
+        <div className="fixed top-0 z-20 h-12 w-full backdrop-blur-lg bg-carbon-gold bg-opacity-50 border-b border-carbon-bronze/20">
             <div className="flex justify-between items-center h-full px-4">
                 <Button
                     variant="icon"

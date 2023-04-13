@@ -29,6 +29,7 @@ module.exports = {
                 "screen-3/4": "75vh",
                 hero: "calc(100vh - 104px)",
                 120: "30rem",
+                18: "4.5rem",
             },
             inset: {
                 58: "14.5rem",
