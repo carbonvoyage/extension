@@ -1,85 +1,41 @@
-import React, { useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import Skeleton from "react-loading-skeleton";
 
+import {
+    getEveryOrgCharity,
+    getTransactions,
+    getSelectedCharity,
+} from "../../utils";
 import Card from "../../components/Card";
 import { External } from "../../assets/icons";
-import { Charity } from "../types";
 import {
     EVERYORG_IMAGE_URL,
     EVERYORG_IMAGE_OPTIONS,
     LIGHT_SKELETON_THEME,
-} from "../constants";
+} from "../../constants";
 
-const Home = () => {
-    const [charity, setCharity] = React.useState<Charity>();
-    const [toggleLoading, setToggleLoading] = React.useState<boolean>(false);
-    const fakeData = [
-        {
-            id: 1,
-            title: "Apple Seeds",
-            price: 1.99,
-            image: "",
-        },
-        {
-            id: 2,
-            title: "Garden Hose",
-            price: 19.99,
-            image: "",
-        },
-        {
-            id: 3,
-            title: "Garden Trowel",
-            price: 9.99,
-            image: "",
-        },
-    ];
+import type { Database } from "../../types/supabase";
+import type { Nonprofit as EveryOrgCharity } from "../../types/everyOrg";
 
-    useEffect(() => {
-        browser.runtime
-            .sendMessage({ action: "getCharity", value: "carbonplan" })
-            .then((response) => {
-                // Limit name length
-                if (
-                    response.charity.name &&
-                    response.charity.name.length > 14
-                ) {
-                    response.charity.name = response.charity.name.slice(0, 14);
-                    response.charity.name = response.charity.name.trim();
-                    response.charity.name += "...";
-                }
+type Charity = Database["public"]["Tables"]["charities"]["Row"];
+type Transaction = Database["public"]["Tables"]["transactions"]["Row"];
 
-                // Clean up websiteUrl
-                if (response.charity.websiteUrl) {
-                    const url = new URL(response.charity.websiteUrl);
-                    response.charity.websiteUrl = url.hostname.replace(
-                        "www.",
-                        ""
-                    );
-                }
+interface SummaryProps {
+    charity?: Charity;
+    everyOrgCharity?: EveryOrgCharity;
+}
 
-                if (toggleLoading) {
-                    setCharity(undefined);
-                    return;
-                }
-
-                setCharity(response.charity);
-            });
-    }, [toggleLoading]);
-
+const Summary: FunctionComponent<SummaryProps> = ({
+    charity,
+    everyOrgCharity,
+}) => {
     return (
         <>
-            {/* <button
-                onClick={() => {
-                    setToggleLoading(!toggleLoading);
-                }}
-            >
-                Toggle Load
-            </button> */}
             <div className="flex flex-row gap-4 my-4">
                 <div className="flex flex-col justify-center">
                     <div className="relative w-16 h-16 border border-carbon-bronze/20 bg-carbon-gold overflow-hidden rounded-full">
-                        {!charity ? (
+                        {!everyOrgCharity ? (
                             <Skeleton
                                 className="absolute top-0"
                                 height={64}
@@ -88,23 +44,23 @@ const Home = () => {
                         ) : (
                             <img
                                 className="w-full h-full object-cover"
-                                src={`${EVERYORG_IMAGE_URL}${EVERYORG_IMAGE_OPTIONS}${charity.logoCloudinaryId}`}
-                                alt={charity.name}
+                                src={`${EVERYORG_IMAGE_URL}${EVERYORG_IMAGE_OPTIONS}${everyOrgCharity.logoCloudinaryId}`}
+                                alt={everyOrgCharity.name}
                             />
                         )}
                     </div>
                 </div>
                 <div className="flex flex-col justify-center">
                     <p className="text-sm">
-                        {charity ? (
+                        {everyOrgCharity ? (
                             "Selected Charity"
                         ) : (
                             <Skeleton width={100} />
                         )}
                     </p>
                     <h1 className="font-display text-2xl -mb-1">
-                        {charity?.name ? (
-                            charity.name
+                        {everyOrgCharity ? (
+                            everyOrgCharity.name
                         ) : (
                             <Skeleton width={160} />
                         )}
@@ -113,12 +69,12 @@ const Home = () => {
                         className="underline text-left cursor-pointer"
                         onClick={() => {
                             browser.tabs.create({
-                                url: charity?.websiteUrl,
+                                url: everyOrgCharity?.websiteUrl,
                             });
                         }}
                     >
-                        {charity?.websiteUrl ? (
-                            charity.websiteUrl
+                        {everyOrgCharity ? (
+                            everyOrgCharity.websiteUrl
                         ) : (
                             <Skeleton width={120} />
                         )}
@@ -143,7 +99,7 @@ const Home = () => {
                         </p>
                         <h1 className="font-display text-2xl">
                             {charity ? (
-                                "$20.23"
+                                `$${charity.total_donated}`
                             ) : (
                                 <Skeleton
                                     {...LIGHT_SKELETON_THEME}
@@ -176,67 +132,129 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div>
-                <h1 className="text-2xl font-display mt-6">
-                    {charity ? "Your Voyage" : <Skeleton width={144} />}
-                </h1>
-                <p className="font-body mb-2">
-                    {charity ? (
-                        "Latest carbon offset activity."
-                    ) : (
-                        <Skeleton width={216} />
-                    )}
-                </p>
-                <div className="bg-carbon-white border border-carbon-bronze/20 rounded-xl p-2 mb-6">
-                    <div className="flex flex-col -my-2 divide-y divide-carbon-bronze/20">
-                        {charity ? (
-                            fakeData.map((item) => (
-                                <Card
-                                    key={item.id}
-                                    HoverIcon={External}
-                                    image={{
-                                        src: item.image,
-                                        alt: item.title,
-                                        shape: "square",
-                                    }}
-                                >
-                                    <h1>{item.title}</h1>
-                                    <p className="text-sm text-carbon-bronze/50">
-                                        ${item.price}
-                                    </p>
-                                </Card>
-                            ))
-                        ) : (
-                            <>
-                                {/* TODO: Make this look nicer */}
-                                {["", "", ""].map((_, index) => (
-                                    <Card
-                                        key={index}
-                                        loading
-                                        hover={false}
-                                        image={{
-                                            shape: "square",
-                                        }}
-                                    >
-                                        <h1>
-                                            <Skeleton
-                                                {...LIGHT_SKELETON_THEME}
-                                                width={110}
-                                            />
-                                        </h1>
-                                        <p className="text-sm text-carbon-bronze/50">
-                                            <Skeleton
-                                                {...LIGHT_SKELETON_THEME}
-                                                width={54}
-                                            />
-                                        </p>
-                                    </Card>
-                                ))}
-                            </>
-                        )}
-                    </div>
+        </>
+    );
+};
+
+interface TransactionsProps {
+    transactions?: Transaction[];
+}
+
+const Transactions: FunctionComponent<TransactionsProps> = ({
+    transactions,
+}) => {
+    const skeletons = Array.from({ length: 3 }, (_, i) => i);
+
+    return (
+        <>
+            <h1 className="text-2xl font-display mt-6">
+                {transactions ? "Your Voyage" : <Skeleton width={144} />}
+            </h1>
+            <p className="font-body mb-2">
+                {transactions ? (
+                    "Latest carbon offset activity."
+                ) : (
+                    <Skeleton width={216} />
+                )}
+            </p>
+            <div className="bg-carbon-white border border-carbon-bronze/20 rounded-xl p-3 mb-6">
+                <div className="flex flex-col -my-3 divide-y divide-carbon-bronze/20">
+                    {transactions
+                        ? transactions.map((item) => (
+                              <Card
+                                  key={item.id}
+                                  HoverIcon={External}
+                                  image={{
+                                      shape: "square",
+                                  }}
+                              >
+                                  <h1>
+                                      Purchased on{" "}
+                                      {(() => {
+                                          if (!item.created_at) {
+                                              return <></>;
+                                          }
+
+                                          const date = new Date(
+                                              // TODO: Is required
+                                              item.created_at
+                                          );
+
+                                          return (
+                                              <>
+                                                  {date.toLocaleDateString(
+                                                      "en-US",
+                                                      {
+                                                          month: "short",
+                                                      }
+                                                  )}{" "}
+                                                  {date.getDate()}
+                                              </>
+                                          );
+                                      }).call(this)}
+                                  </h1>
+                                  <p className="text-sm text-carbon-bronze/50">
+                                      Donated ${item.offset}.
+                                      {/* TODO: Get actual charity. */}
+                                      {/* {item.selected_charity}. */}
+                                  </p>
+                              </Card>
+                          ))
+                        : skeletons.map((index) => (
+                              <Card
+                                  key={index}
+                                  loading
+                                  image={{
+                                      shape: "square",
+                                  }}
+                              >
+                                  <h1>
+                                      <Skeleton
+                                          {...LIGHT_SKELETON_THEME}
+                                          width={110}
+                                      />
+                                  </h1>
+                                  <p className="text-sm text-carbon-bronze/50">
+                                      <Skeleton
+                                          {...LIGHT_SKELETON_THEME}
+                                          width={54}
+                                      />
+                                  </p>
+                              </Card>
+                          ))}
                 </div>
             </div>
+        </>
+    );
+};
+
+const Home = () => {
+    const [charity, setCharity] = useState<Charity>();
+    const [everyOrgCharity, setEveryOrgCharity] = useState<EveryOrgCharity>();
+    const [transactions, setTransactions] = useState<Transaction[]>();
+
+    useEffect(() => {
+        getSelectedCharity().then(async (selectedCharity) => {
+            // TODO: Name should be required
+            if (!selectedCharity.name) {
+                return;
+            }
+
+            const everyOrgCharityRes = await getEveryOrgCharity(
+                selectedCharity.name
+            );
+            const transactionsRes = await getTransactions();
+
+            setCharity(selectedCharity);
+            setEveryOrgCharity(everyOrgCharityRes);
+            setTransactions(transactionsRes);
+        });
+    }, []);
+
+    return (
+        <>
+            <Summary everyOrgCharity={everyOrgCharity} charity={charity} />
+            <Transactions transactions={transactions} />
         </>
     );
 };

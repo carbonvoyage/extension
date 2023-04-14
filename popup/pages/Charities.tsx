@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from "react";
 import browser from "webextension-polyfill";
+import Skeleton from "react-loading-skeleton";
 
 import Card from "../../components/Card";
-import { Charity } from "../types";
 import { Check } from "../../assets/icons";
-import { EVERYORG_IMAGE_URL, EVERYORG_IMAGE_OPTIONS } from "../constants";
+import {
+    EVERYORG_IMAGE_URL,
+    EVERYORG_IMAGE_OPTIONS,
+    LIGHT_SKELETON_THEME,
+} from "../../constants";
+
+import type { Nonprofit as EveryOrgCharity } from "../../types/everyOrg";
 
 const Charities = () => {
-    const [charities, setCharities] = useState<Charity[]>();
+    const [charities, setCharities] = useState<EveryOrgCharity[]>();
+    const skeletons = Array.from({ length: 10 }, (_, i) => i);
+
     useEffect(() => {
         browser.runtime
-            .sendMessage({ action: "getCharities" })
+            .sendMessage({ action: "getEveryOrgCharities" })
             .then((response) => {
                 // Limit name and description length
-                response.charities.forEach((charity: Charity) => {
+                response.charities.forEach((charity: EveryOrgCharity) => {
                     if (charity.name && charity.name.length > 20) {
                         charity.name = charity.name.slice(0, 20);
                         charity.name = charity.name.trim();
@@ -35,54 +43,82 @@ const Charities = () => {
             });
     }, []);
 
-    // TODO Add skeleton loading
-    if (!charities) {
-        return <div>Loading...</div>;
-    }
-
     return (
         <>
             <div>
-                <h1 className="text-2xl font-display mt-6">Charities</h1>
-                <p className="font-body mb-6">Select a charity to support.</p>
+                <h1 className="text-2xl font-display mt-6">
+                    {charities ? "Charities" : <Skeleton width={90} />}
+                </h1>
+                <p className="font-body mb-6">
+                    {charities ? (
+                        "Select a charity to support."
+                    ) : (
+                        <Skeleton width={200} />
+                    )}
+                </p>
             </div>
-            <div className="bg-carbon-white border border-carbon-bronze/20 rounded-xl p-2 mb-6">
-                <div className="flex flex-col -my-2 divide-y divide-carbon-bronze/20">
-                    {charities.map((charity) => {
-                        let linkText = charity.profileUrl.replace(
-                            "https://www.",
-                            ""
-                        );
-                        if (linkText.length > 20) {
-                            linkText = linkText.slice(0, 20);
-                            linkText = linkText.trim();
-                            linkText += "...";
-                        }
+            <div className="bg-carbon-white border border-carbon-bronze/20 rounded-xl p-3 mb-6">
+                <div className="flex flex-col -my-3 divide-y divide-carbon-bronze/20">
+                    {charities
+                        ? charities.map((charity) => {
+                              let linkText = charity.profileUrl.replace(
+                                  "https://www.",
+                                  ""
+                              );
+                              if (linkText.length > 20) {
+                                  linkText = linkText.slice(0, 20);
+                                  linkText = linkText.trim();
+                                  linkText += "...";
+                              }
 
-                        return (
-                            <Card
-                                key={charity.id}
-                                HoverIcon={Check}
-                                image={{
-                                    src: `${EVERYORG_IMAGE_URL}${EVERYORG_IMAGE_OPTIONS}${charity.logoCloudinaryId}`,
-                                    alt: charity.name,
-                                    shape: "circle",
-                                }}
-                            >
-                                <h1>{charity.name}</h1>
-                                <button
-                                    className="text-sm text-left cursor-pointer underline text-carbon-bronze/70"
-                                    onClick={() => {
-                                        browser.tabs.create({
-                                            url: charity.profileUrl,
-                                        });
-                                    }}
-                                >
-                                    {linkText}
-                                </button>
-                            </Card>
-                        );
-                    })}
+                              return (
+                                  <Card
+                                      key={charity.id}
+                                      HoverIcon={Check}
+                                      image={{
+                                          src:
+                                              charity.logoCloudinaryId &&
+                                              `${EVERYORG_IMAGE_URL}${EVERYORG_IMAGE_OPTIONS}${charity.logoCloudinaryId}`,
+                                          alt: charity.name,
+                                          shape: "circle",
+                                      }}
+                                  >
+                                      <h1>{charity.name}</h1>
+                                      <button
+                                          className="text-sm text-left cursor-pointer underline text-carbon-bronze/70"
+                                          onClick={() => {
+                                              browser.tabs.create({
+                                                  url: charity.profileUrl,
+                                              });
+                                          }}
+                                      >
+                                          {linkText}
+                                      </button>
+                                  </Card>
+                              );
+                          })
+                        : skeletons.map((index) => (
+                              <Card
+                                  key={index}
+                                  loading
+                                  image={{
+                                      shape: "circle",
+                                  }}
+                              >
+                                  <h1>
+                                      <Skeleton
+                                          {...LIGHT_SKELETON_THEME}
+                                          width={110}
+                                      />
+                                  </h1>
+                                  <p className="text-sm text-carbon-bronze/50">
+                                      <Skeleton
+                                          {...LIGHT_SKELETON_THEME}
+                                          width={54}
+                                      />
+                                  </p>
+                              </Card>
+                          ))}
                 </div>
             </div>
         </>

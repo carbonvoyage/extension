@@ -22,8 +22,13 @@ const Topbar = () => {
                 .query({ active: true, currentWindow: true })
                 .then(async (tabs) => {
                     try {
+                        if (tabs.length === 0 || tabs[0].id === undefined) {
+                            setUrl("Unsupported Site");
+                            setKnown(SiteType.UNKNOWN);
+                            return;
+                        }
+
                         const { url } = await browser.tabs.sendMessage(
-                            // @ts-ignore
                             tabs[0].id,
                             {
                                 action: "getURL",
@@ -44,8 +49,27 @@ const Topbar = () => {
                     }
                 });
         };
+
         getURL();
     }, []);
+
+    let IconAttributes = {
+        className: "inline-block mr-1 -translate-y-0.5",
+        width: "14px",
+        height: "14px",
+    };
+    let Icon = () => <Unknown {...IconAttributes} />;
+
+    useEffect(() => {
+        switch (known) {
+            case SiteType.UNKNOWN:
+                Icon = () => <Unknown {...IconAttributes} />;
+            case SiteType.KNOWN:
+                Icon = () => <Known {...IconAttributes} />;
+            case SiteType.ORIGIN:
+                Icon = () => <Heart {...IconAttributes} />;
+        }
+    }, [known]);
 
     return (
         <div className="fixed top-0 z-20 h-12 w-full backdrop-blur-lg bg-carbon-gold bg-opacity-50 border-b border-carbon-bronze/20">
@@ -62,35 +86,8 @@ const Topbar = () => {
                 >
                     <Logo width="20px" height="20px" />
                 </Button>
-                <div className="bg-carbon-bronze text-carbon-gold text-sm py-0.5 px-2 rounded-full">
-                    {(() => {
-                        switch (known) {
-                            case SiteType.UNKNOWN:
-                                return (
-                                    <Unknown
-                                        className="inline-block mr-1 -translate-y-px"
-                                        width="14px"
-                                        height="14px"
-                                    />
-                                );
-                            case SiteType.KNOWN:
-                                return (
-                                    <Known
-                                        className="inline-block mr-1 -translate-y-px"
-                                        width="14px"
-                                        height="14px"
-                                    />
-                                );
-                            case SiteType.ORIGIN:
-                                return (
-                                    <Heart
-                                        className="inline-block mr-1 -translate-y-px"
-                                        width="14px"
-                                        height="14px"
-                                    />
-                                );
-                        }
-                    }).call(this)}
+                <div className="bg-carbon-bronze text-carbon-gold text-sm py-0.5 pl-1.5 pr-2 rounded-full">
+                    <Icon />
                     {url}
                 </div>
                 <Button

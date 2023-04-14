@@ -3,9 +3,9 @@ import React, { FunctionComponent, ReactNode } from "react";
 import { motion } from "framer-motion";
 
 type Props = {
+    children: ReactNode;
     variant?: "primary" | "alt" | "light" | "icon";
     size?: "none" | "minimal" | "small" | "medium" | "large";
-    children: ReactNode;
     className?: string;
     onClick?: () => void;
 };

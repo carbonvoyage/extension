@@ -1,6 +1,6 @@
 import React from "react";
 
-const SignIn = () => {
+const AuthPrompt = () => {
     return (
         <div className="w-80 h-120">
             <p className="absolute w-full text-center top-1/2 -translate-y-1/2">
@@ -10,4 +10,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default AuthPrompt;

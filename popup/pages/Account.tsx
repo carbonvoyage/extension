@@ -1,15 +1,13 @@
 import React, { useEffect, useState, FunctionComponent } from "react";
 import browser from "webextension-polyfill";
 
-type User = {
-    first_name: string;
-    last_name: string;
-    avatar_url: string;
-};
+import type { Database } from "../../types/supabase";
 
-type Props = {
+type User = Database["public"]["Tables"]["users"]["Row"];
+
+interface Props {
     session: any;
-};
+}
 
 const Account: FunctionComponent<Props> = ({ session }) => {
     const [user, setUser] = useState<User>();

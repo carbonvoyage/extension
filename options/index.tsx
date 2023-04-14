@@ -6,7 +6,7 @@ import "../styles/global.css";
 const pluginTagId = "__carbonvoyage";
 const existingInstance = document.getElementById("__carbonvoyage");
 if (existingInstance) {
-    console.log("existing instance found, removing");
+    console.warn("existing instance found, removing");
     existingInstance.remove();
 }
 
