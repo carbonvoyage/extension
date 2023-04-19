@@ -15,16 +15,16 @@ const App = () => {
     const [screen, setScreen] = useState(SCREEN.FACTS);
     const [error, setError] = useState("");
 
-    async function getSession() {
-        const {
-            data: { session },
-        } = await browser.runtime.sendMessage({ action: "getSession" });
-        setSession(session);
-    }
+    // async function getSession() {
+    //     const {
+    //         data: { session },
+    //     } = await browser.runtime.sendMessage({ action: "getSession" });
+    //     setSession(session);
+    // }
 
-    useEffect(() => {
-        getSession();
-    }, []);
+    // useEffect(() => {
+    //     getSession();
+    // }, []);
 
     async function handleOnClick() {
         setLoading(true);
