@@ -27,7 +27,7 @@ Here locate the `dist/` directory and open `manifest.json`
 `npm run build:chrome` builds the extensions for Google Chrome.
 
 The generated files are in `dist/`.
-To load the extensions in Google Chrome go to `chrome://extensions/` and click `Load unpacked`. Locate the dist directory and select `manifest.json`.
+To load the extensions in Google Chrome go to `chrome://extensions/` and click `Load unpacked`. Locate and select the dist directory (which should contain `manifest.json`).
 
 ## Files
 
