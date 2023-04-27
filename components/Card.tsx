@@ -1,20 +1,10 @@
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent, ReactNode, ReactSVGElement } from "react";
 import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import classNames from "classnames";
 
 import { LIGHT_SKELETON_THEME } from "../constants";
 import { Logo } from "../assets/icons";
-
-type ReactSVGNode = ({
-    className,
-    fill,
-    ...props
-}: {
-    [x: string]: any;
-    className?: string | undefined;
-    fill?: string | undefined;
-}) => JSX.Element;
 
 interface Image {
     src?: string;
@@ -23,12 +13,18 @@ interface Image {
 }
 
 interface IconProps {
-    HoverIcon?: ReactSVGNode;
+    HoverIcon?: React.ComponentType<React.SVGProps<ReactSVGElement>>;
+    onClick?: () => void;
     image?: Image;
     loading?: boolean;
 }
 
-const Icon: FunctionComponent<IconProps> = ({ HoverIcon, image, loading }) => {
+const Icon: FunctionComponent<IconProps> = ({
+    HoverIcon,
+    onClick,
+    image,
+    loading,
+}) => {
     const iconClassName = classNames(
         image?.shape === "circle" ? "rounded-full" : "rounded-xl",
         !loading && "cursor-pointer",
@@ -41,7 +37,8 @@ const Icon: FunctionComponent<IconProps> = ({ HoverIcon, image, loading }) => {
     );
 
     return (
-        <motion.div
+        <motion.button
+            onClick={onClick}
             whileTap={!loading ? { scale: 0.95 } : {}}
             whileHover={!loading ? { scale: 1.05 } : {}}
             transition={{
@@ -53,7 +50,7 @@ const Icon: FunctionComponent<IconProps> = ({ HoverIcon, image, loading }) => {
         >
             {loading ? (
                 <Skeleton
-                    className="absolute top-0"
+                    className="absolute top-0 left-0"
                     {...LIGHT_SKELETON_THEME}
                     height={56}
                     width={56}
@@ -72,19 +69,21 @@ const Icon: FunctionComponent<IconProps> = ({ HoverIcon, image, loading }) => {
             <div className={hoverClassName}>
                 {HoverIcon && <HoverIcon className="w-full h-full p-3" />}
             </div>
-        </motion.div>
+        </motion.button>
     );
 };
 
 interface CardProps {
     children: ReactNode;
-    HoverIcon?: ReactSVGNode;
+    onClick?: () => void;
+    HoverIcon?: React.ComponentType<React.SVGProps<ReactSVGElement>>;
     image?: Image;
     loading?: boolean;
 }
 
 const Card: FunctionComponent<CardProps> = ({
     children,
+    onClick,
     HoverIcon,
     image,
     loading,
@@ -105,6 +104,7 @@ const Card: FunctionComponent<CardProps> = ({
                         <div className="flex flex-col justify-center">
                             <Icon
                                 HoverIcon={HoverIcon}
+                                onClick={onClick}
                                 image={image}
                                 loading={loading}
                             />

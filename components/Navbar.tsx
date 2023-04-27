@@ -59,7 +59,11 @@ const Navbar: FunctionComponent<Props> = ({ pageView, setPageView }) => {
             icon: <User className="w-6 h-6" />,
             view: PageView.ACCOUNT,
             onClick: () => {
-                setPageView(PageView.ACCOUNT);
+                // TODO: Finish account page support
+                // setPageView(PageView.ACCOUNT);
+                browser.tabs.create({
+                    url: "https://carbonvoyage.org/account",
+                });
                 setIsMenuOpen(false);
             },
         },
@@ -89,15 +93,15 @@ const Navbar: FunctionComponent<Props> = ({ pageView, setPageView }) => {
                 });
             },
         },
-        {
-            label: "Options",
-            onClick: () => {
-                browser.tabs.create({
-                    // TODO: Firefox support
-                    url: "chrome://extensions/?options=mdcgbdmolfjpjaljhjaocjnlkmidgfed",
-                });
-            },
-        },
+        // {
+        //     label: "Options",
+        //     onClick: () => {
+        //         browser.tabs.create({
+        //             // TODO: Firefox support
+        //             url: "chrome://extensions/?options=mdcgbdmolfjpjaljhjaocjnlkmidgfed",
+        //         });
+        //     },
+        // },
     ];
 
     return (

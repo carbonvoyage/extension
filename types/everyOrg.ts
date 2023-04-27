@@ -10,6 +10,7 @@ export interface Data {
 export interface Nonprofit {
     id: string;
     name: string;
+    slug: string; // Is the primary slug in search results
     primarySlug: string;
     ein: string;
     isDisbursable: boolean;

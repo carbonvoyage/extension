@@ -22,7 +22,9 @@ type Charity = Database["public"]["Tables"]["charities"]["Row"];
 type Transaction = Database["public"]["Tables"]["transactions"]["Row"];
 
 interface SummaryProps {
-    charity?: Charity;
+    charity?: Charity & {
+        month_donated: number;
+    };
     everyOrgCharity?: EveryOrgCharity;
 }
 
@@ -58,27 +60,16 @@ const Summary: FunctionComponent<SummaryProps> = ({
                             <Skeleton width={100} />
                         )}
                     </p>
-                    <h1 className="font-display text-2xl -mb-1">
+                    <h1
+                        className="font-display text-2xl -mb-1 truncate w-52"
+                        aria-label={everyOrgCharity?.name}
+                    >
                         {everyOrgCharity ? (
                             everyOrgCharity.name
                         ) : (
                             <Skeleton width={160} />
                         )}
                     </h1>
-                    <button
-                        className="underline text-left cursor-pointer"
-                        onClick={() => {
-                            browser.tabs.create({
-                                url: everyOrgCharity?.websiteUrl,
-                            });
-                        }}
-                    >
-                        {everyOrgCharity ? (
-                            everyOrgCharity.websiteUrl
-                        ) : (
-                            <Skeleton width={120} />
-                        )}
-                    </button>
                 </div>
             </div>
             <p className="mb-2">
@@ -99,7 +90,7 @@ const Summary: FunctionComponent<SummaryProps> = ({
                         </p>
                         <h1 className="font-display text-2xl">
                             {charity ? (
-                                `$${charity.total_donated}`
+                                `$${charity.month_donated}`
                             ) : (
                                 <Skeleton
                                     {...LIGHT_SKELETON_THEME}
@@ -111,7 +102,7 @@ const Summary: FunctionComponent<SummaryProps> = ({
                     <div className="basis-1/2 flex flex-col justify-center px-2">
                         <p className="text-sm">
                             {charity ? (
-                                "This Year"
+                                "Total"
                             ) : (
                                 <Skeleton
                                     {...LIGHT_SKELETON_THEME}
@@ -121,7 +112,7 @@ const Summary: FunctionComponent<SummaryProps> = ({
                         </p>
                         <h1 className="font-display text-2xl">
                             {charity ? (
-                                "$420.23"
+                                `$${charity.total_donated}`
                             ) : (
                                 <Skeleton
                                     {...LIGHT_SKELETON_THEME}
@@ -194,7 +185,7 @@ const Transactions: FunctionComponent<TransactionsProps> = ({
                                       }).call(this)}
                                   </h1>
                                   <p className="text-sm text-carbon-bronze/50">
-                                      Donated ${item.offset}.
+                                      Donated ${item.total_offset}.
                                       {/* TODO: Get actual charity. */}
                                       {/* {item.selected_charity}. */}
                                   </p>
@@ -229,7 +220,11 @@ const Transactions: FunctionComponent<TransactionsProps> = ({
 };
 
 const Home = () => {
-    const [charity, setCharity] = useState<Charity>();
+    const [charity, setCharity] = useState<
+        Charity & {
+            month_donated: number;
+        }
+    >();
     const [everyOrgCharity, setEveryOrgCharity] = useState<EveryOrgCharity>();
     const [transactions, setTransactions] = useState<Transaction[]>();
 
@@ -240,8 +235,10 @@ const Home = () => {
                 return;
             }
 
+            console.log(selectedCharity);
+
             const everyOrgCharityRes = await getEveryOrgCharity(
-                selectedCharity.name
+                selectedCharity.slug
             );
             const transactionsRes = await getTransactions();
 

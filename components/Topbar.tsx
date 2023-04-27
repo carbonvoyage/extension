@@ -54,22 +54,10 @@ const Topbar = () => {
     }, []);
 
     let IconAttributes = {
-        className: "inline-block mr-1 -translate-y-0.5",
+        className: "inline-block mr-1 -translate-y-px",
         width: "14px",
         height: "14px",
     };
-    let Icon = () => <Unknown {...IconAttributes} />;
-
-    useEffect(() => {
-        switch (known) {
-            case SiteType.UNKNOWN:
-                Icon = () => <Unknown {...IconAttributes} />;
-            case SiteType.KNOWN:
-                Icon = () => <Known {...IconAttributes} />;
-            case SiteType.ORIGIN:
-                Icon = () => <Heart {...IconAttributes} />;
-        }
-    }, [known]);
 
     return (
         <div className="fixed top-0 z-20 h-12 w-full backdrop-blur-lg bg-carbon-gold bg-opacity-50 border-b border-carbon-bronze/20">
@@ -87,7 +75,16 @@ const Topbar = () => {
                     <Logo width="20px" height="20px" />
                 </Button>
                 <div className="bg-carbon-bronze text-carbon-gold text-sm py-0.5 pl-1.5 pr-2 rounded-full">
-                    <Icon />
+                    {(() => {
+                        switch (known) {
+                            case SiteType.UNKNOWN:
+                                return <Unknown {...IconAttributes} />;
+                            case SiteType.KNOWN:
+                                return <Known {...IconAttributes} />;
+                            case SiteType.ORIGIN:
+                                return <Heart {...IconAttributes} />;
+                        }
+                    }).call(this)}
                     {url}
                 </div>
                 <Button

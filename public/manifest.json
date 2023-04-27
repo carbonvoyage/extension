@@ -8,9 +8,6 @@
         "default_title": "Carbon Voyage"
     },
     "permissions": ["storage", "tabs"],
-    "externally_connectable": {
-        "matches": ["*://*.carbonvoyage.org/*", "http://localhost:3000/*"]
-    },
     "content_scripts": [
         {
             "matches": [

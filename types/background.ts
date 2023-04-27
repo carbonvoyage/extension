@@ -14,10 +14,22 @@ interface GetMessage {
 }
 
 interface GetMessageBy {
-    action: "getEveryOrgCharity";
+    action: "getEveryOrgCharity" | "updateSelectedCharity";
     value: string;
 }
 
-export type Message = UpdateMessage | GetMessage | GetMessageBy;
+interface UpdateMessageBy {
+    action: "updateSelectedCharity";
+    value: {
+        name: string;
+        slug: string;
+    };
+}
+
+export type Message =
+    | UpdateMessage
+    | GetMessage
+    | GetMessageBy
+    | UpdateMessageBy;
 
 export type ResponseCallback = (data: any) => void;

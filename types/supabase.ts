@@ -11,113 +11,116 @@ export interface Database {
     Tables: {
       charities: {
         Row: {
-          description: string | null
-          id: number
-          location: string | null
-          name: string | null
-          total_donated: number | null
-          user_id: string | null
-          website: string | null
+          first_donated: string | null
+          id: string
+          name: string
+          selected: boolean
+          slug: string
+          total_donated: number
+          total_transactions: number
+          user_id: string
         }
         Insert: {
-          description?: string | null
-          id?: number
-          location?: string | null
-          name?: string | null
-          total_donated?: number | null
-          user_id?: string | null
-          website?: string | null
+          first_donated?: string | null
+          id?: string
+          name: string
+          selected?: boolean
+          slug: string
+          total_donated?: number
+          total_transactions?: number
+          user_id: string
         }
         Update: {
-          description?: string | null
-          id?: number
-          location?: string | null
-          name?: string | null
-          total_donated?: number | null
-          user_id?: string | null
-          website?: string | null
+          first_donated?: string | null
+          id?: string
+          name?: string
+          selected?: boolean
+          slug?: string
+          total_donated?: number
+          total_transactions?: number
+          user_id?: string
         }
       }
       products: {
         Row: {
-          emissions: number | null
+          emissions: number
           height: number | null
-          id: number
           length: number | null
           materials: string[] | null
-          offset_paid: number | null
-          offset_price: number | null
-          price: number | null
-          title: string | null
-          transaction_id: number | null
+          offset: number
+          price: number
+          title: string
+          transaction_id: string
           user_id: string
+          uuid: string
           weight: number | null
           width: number | null
         }
         Insert: {
-          emissions?: number | null
+          emissions?: number
           height?: number | null
-          id?: number
           length?: number | null
           materials?: string[] | null
-          offset_paid?: number | null
-          offset_price?: number | null
-          price?: number | null
-          title?: string | null
-          transaction_id?: number | null
+          offset?: number
+          price?: number
+          title: string
+          transaction_id: string
           user_id: string
+          uuid?: string
           weight?: number | null
           width?: number | null
         }
         Update: {
-          emissions?: number | null
+          emissions?: number
           height?: number | null
-          id?: number
           length?: number | null
           materials?: string[] | null
-          offset_paid?: number | null
-          offset_price?: number | null
-          price?: number | null
-          title?: string | null
-          transaction_id?: number | null
+          offset?: number
+          price?: number
+          title?: string
+          transaction_id?: string
           user_id?: string
+          uuid?: string
           weight?: number | null
           width?: number | null
         }
       }
       transactions: {
         Row: {
-          created_at: string | null
+          created_at: string
           donated: boolean
           donated_at: string | null
-          id: number
-          offset: number
-          selected_charity: number
-          total: number
+          id: string
+          marketplace: string
+          selected_charity: string
+          total_emissions: number
+          total_offset: number
+          total_price: number
           user_id: string
-          website: string | null
         }
         Insert: {
-          created_at?: string | null
-          donated: boolean
-          donated_at?: string | null
-          id?: number
-          offset: number
-          selected_charity: number
-          total: number
-          user_id: string
-          website?: string | null
-        }
-        Update: {
-          created_at?: string | null
+          created_at?: string
           donated?: boolean
           donated_at?: string | null
-          id?: number
-          offset?: number
-          selected_charity?: number
-          total?: number
+          id?: string
+          marketplace: string
+          selected_charity: string
+          total_emissions?: number
+          total_offset?: number
+          total_price?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          donated?: boolean
+          donated_at?: string | null
+          id?: string
+          marketplace?: string
+          selected_charity?: string
+          total_emissions?: number
+          total_offset?: number
+          total_price?: number
           user_id?: string
-          website?: string | null
         }
       }
       users: {
@@ -126,21 +129,24 @@ export interface Database {
           first_name: string | null
           id: string
           last_name: string | null
-          selected_charity: number | null
+          total_donated: number
+          total_emissions: number
         }
         Insert: {
           avatar_url?: string | null
           first_name?: string | null
           id: string
           last_name?: string | null
-          selected_charity?: number | null
+          total_donated?: number
+          total_emissions?: number
         }
         Update: {
           avatar_url?: string | null
           first_name?: string | null
           id?: string
           last_name?: string | null
-          selected_charity?: number | null
+          total_donated?: number
+          total_emissions?: number
         }
       }
     }

@@ -21,7 +21,7 @@ const App = () => {
     return (
         <div>
             <h1>Settings</h1>
-            <Button>Click me</Button>
+            <p>Nothing here yet. Check back later.</p>
         </div>
     );
 };

@@ -4,6 +4,7 @@ import Skeleton from "react-loading-skeleton";
 
 import Card from "../../components/Card";
 import { Check } from "../../assets/icons";
+import { getEveryOrgCharities, updateSelectedCharity } from "../../utils";
 import {
     EVERYORG_IMAGE_URL,
     EVERYORG_IMAGE_OPTIONS,
@@ -17,30 +18,9 @@ const Charities = () => {
     const skeletons = Array.from({ length: 10 }, (_, i) => i);
 
     useEffect(() => {
-        browser.runtime
-            .sendMessage({ action: "getEveryOrgCharities" })
-            .then((response) => {
-                // Limit name and description length
-                response.charities.forEach((charity: EveryOrgCharity) => {
-                    if (charity.name && charity.name.length > 20) {
-                        charity.name = charity.name.slice(0, 20);
-                        charity.name = charity.name.trim();
-                        charity.name += "...";
-                    }
-
-                    if (
-                        charity.description &&
-                        charity.description.length > 45
-                    ) {
-                        charity.description = charity.description.slice(0, 45);
-                        charity.description = charity.description.trim();
-                        charity.description += "...";
-                    }
-
-                    return charity;
-                });
-                setCharities(response.charities);
-            });
+        getEveryOrgCharities().then((charities) => {
+            setCharities(charities);
+        });
     }, []);
 
     return (
@@ -75,6 +55,12 @@ const Charities = () => {
                                   <Card
                                       key={charity.id}
                                       HoverIcon={Check}
+                                      onClick={() => {
+                                          updateSelectedCharity(
+                                              charity.name,
+                                              charity.slug
+                                          );
+                                      }}
                                       image={{
                                           src:
                                               charity.logoCloudinaryId &&
@@ -83,7 +69,9 @@ const Charities = () => {
                                           shape: "circle",
                                       }}
                                   >
-                                      <h1>{charity.name}</h1>
+                                      <h1 className="truncate w-48">
+                                          {charity.name}
+                                      </h1>
                                       <button
                                           className="text-sm text-left cursor-pointer underline text-carbon-bronze/70"
                                           onClick={() => {
