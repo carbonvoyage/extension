@@ -1,33 +1,36 @@
 {
-  "name": "Cat Facts",
-  "description": "Learn random facts about cats",
-  "version": "1.0.0",
-  "manifest_version": 3,
-  "action": {
-    "default_popup": "index.html",
-    "default_title": "Open the popup"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://blank.org/*"
-      ],
-      "run_at": "document_end",
-      "js": [
-        "./index.global.js"
-      ],
-      "css": [
-        "./style.css"
-      ]
+    "name": "Carbon Voyage",
+    "description": "Your way to make online purchases carbon-neutral.",
+    "version": "0.0.1",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup/index.html",
+        "default_title": "Carbon Voyage"
+    },
+    "permissions": ["storage", "tabs"],
+    "externally_connectable": {
+        "matches": ["*://*.carbonvoyage.org/*", "http://localhost:3000/*"]
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.amazon.com/*",
+                "*://*.carbonvoyage.org/*",
+                "*://*.walmart.com/*",
+                "*://*.ebay.com/"
+            ],
+            "run_at": "document_end",
+            "js": ["./index.global.js"],
+            "css": ["./style.css"]
+        }
+    ],
+    "options_ui": {
+        "page": "options/index.html"
+    },
+    "background": {
+        "service_worker": "background.global.js"
+    },
+    "icons": {
+        "128": "logo128.png"
     }
-  ],
-  "permissions": [
-    "storage"
-  ],
-  "background": {
-    "service_worker": "./background.global.js"
-  },
-  "icons": {
-    "128": "logo128.png"
-  }
 }

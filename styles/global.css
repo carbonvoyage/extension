@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    #__carbonvoyage {
+        font-family: "apolline", serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 18px;
+    }
+}
+
+#__carbonvoyage {
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    @apply text-carbon-bronze bg-carbon-gold antialiased;
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+}
+
+#__carbonvoyage a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+#__carbonvoyage .animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+#__carbonvoyage .height-screen-helper {
+    height: calc(100vh - 80px);
+}
+
+#__carbonvoyage .button-duration-200 {
+    transition: background-color 200ms ease-in-out,
+        border-color 200ms ease-in-out, color 200ms ease-in-out,
+        fill 200ms ease-in-out, stroke 200ms ease-in-out,
+        opacity 200ms ease-in-out, padding 200ms ease-in-out,
+        border-radius 200ms ease-in-out;
+}
+
+#__carbonvoyage .no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
